@@ -1,0 +1,51 @@
+.intro-container {
+    position: fixed;
+    top: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 700px;
+    background: rgba(20, 20, 20, 0.9); 
+    padding: 14px 25px;
+    text-align: center;
+    border-radius: 12px;
+    font-size: 18px;
+    color: white;
+    box-shadow: 0 6px 14px rgba(255, 255, 255, 0.3);
+    font-family: Arial, sans-serif;
+    z-index: 20;
+    opacity: 0;
+    animation: slideDown 1s ease-out forwards, stayVisible 9s linear forwards, slideUp 1s ease-in forwards 9s;
+}
+
+.intro-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; 
+    line-height: 1.2;
+}
+
+.countdown {
+    margin-top: 8px; 
+    font-size: 16px;
+    color: #a05cf5;
+    font-weight: bold;
+}
+
+.title-in-intro {
+    color: #a05cf5;
+}
+
+.real-nasa-data-text {
+    color: #00FFFF;
+}
+
+@keyframes slideDown {
+    from { transform: translate(-50%, -40px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translate(-50%, 0); opacity: 1; }
+    to { transform: translate(-50%, -40px); opacity: 0; }
+}

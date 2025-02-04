@@ -97,7 +97,6 @@ to
 ```
 const API_URL = process.env.REACT_APP_API_URL;
 ```
-, 
 assuming you have the **correct env setup** previously described in step 6 for the frontend.
 
 

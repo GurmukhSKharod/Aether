@@ -1,6 +1,7 @@
 ## **🌌 Aether – Real Space Exploration Game**  
 Aether is a **real-time space exploration game** that dynamically displays celestial bodies using **real NASA data**. Built with **React**, it lets players **navigate space, click planets to collect them, and track scores in a real NASA-generated universe**.
 
+---
 
 ### **🚀 Tech Stack**  
 ### **Frontend**  

@@ -23,7 +23,7 @@ const Hud = ({ score }) => {
             </div>
 
             {/* Game Title - Centered */}
-            <div className="hud-item hud-center">🌌 Aether 🌌</div>
+            <div className="hud-item hud-center">Aether</div>
 
             {/* Score - Right Aligned */}
             <div className="hud-item hud-right">

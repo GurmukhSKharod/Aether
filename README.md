@@ -1,11 +1,11 @@
 ## **🌌 Aether – Real Space Exploration Game**  
 Aether is a **real-time space exploration game** that dynamically displays celestial bodies using **real NASA data**. Built with **React**, it lets players **navigate space, click planets to collect them, and track scores in a real NASA-generated universe**.
 
-The frontend server is hosted via Netlify. Check out the app here: https://aether-exploration.netlify.app/
+The frontend server is hosted via Netlify. Check out the app here: https://aether-exploration.netlify.app/  
 
-The backend server is hosted remotely via Render.com: https://render.com/
-The Database server is hosted via supabase: https://supabase.com/
-
+The backend server is hosted remotely via Render.com: https://render.com/  
+The Database server is hosted via supabase: https://supabase.com/  
+ 
 ---
 
 ### **🚀 Tech Stack**  

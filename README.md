@@ -84,14 +84,19 @@ Create a `.env` file inside the **frontend/** folder:
 REACT_APP_API_URL=http://localhost:5050
 REACT_APP_SUPABASE_URL=https://your-supabase-url.supabase.co
 REACT_APP_SUPABASE_KEY=your-anon-key
-
 ```
 
 Note that the current backend runs on a remote server, 
 so to **run this backend on a localhost server**, 
 replace Line 3 in **frontend > src > hooks > useCelestialData**, 
-from "const API_URL = process.env.REACT_APP_BACKEND_URL;" 
-to "const API_URL = process.env.REACT_APP_API_URL;", 
+from
+```
+const API_URL = process.env.REACT_APP_BACKEND_URL;
+```
+to
+```
+const API_URL = process.env.REACT_APP_API_URL;
+```, 
 assuming you have the **correct env setup** previously described in step 6 for the frontend.
 
 

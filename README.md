@@ -21,7 +21,7 @@ Aether is a **real-time space exploration game** that dynamically displays celes
  
 **NASA Exoplanet Archive API**: Provides **exoplanet data**, including **mass, radius, and distance from their stars**. 
 
-Check out the NASA API Page: (https://api.nasa.gov/)
+Check out the NASA API Page: 🌍 https://api.nasa.gov/
  
 
 ---

@@ -88,7 +88,9 @@ REACT_APP_SUPABASE_KEY=your-anon-key
 
 Note that the current backend runs on a remote server, 
 so to **run this backend on a localhost server**, 
-replace Line 3 in **frontend > src > hooks > useCelestialData**, 
+```
+replace Line 3 in frontend > src > hooks > useCelestialData
+```
 from
 ```
 const API_URL = process.env.REACT_APP_BACKEND_URL;

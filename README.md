@@ -78,7 +78,25 @@ cd ../frontend
 npm install
 ```
 
-### **6️⃣ Start the Frontend**
+### ** 6️⃣ Configure Environment Variables**
+Create a `.env` file inside the **frontend/** folder:
+```
+REACT_APP_API_URL=http://localhost:5050
+REACT_APP_SUPABASE_URL=https://your-supabase-url.supabase.co
+REACT_APP_SUPABASE_KEY=your-anon-key
+
+```
+
+Note that the current backend runs on a remote server, 
+so to **run this backend on a localhost server**, 
+replace Line 3 in **frontend > src > hooks > useCelestialData**, 
+from "const API_URL = process.env.REACT_APP_BACKEND_URL;" 
+to "const API_URL = process.env.REACT_APP_API_URL;", 
+assuming you have the **correct env setup** previously described in step 6 for the frontend.
+
+
+
+### **7️⃣ Start the Frontend**
 ```sh
 npm start
 ```
@@ -86,10 +104,10 @@ Frontend will be available at **http://localhost:3000** 🎮
 
 ---
 
-## **🚀 Creating an Optimized Production Build for Frontend**
+## **🚀 OPTIONALLY: Creating an Optimized Production Build for Frontend**
 By default, **React's development build is not optimized**. To generate a production-ready build, follow these steps:
 
-### **7️⃣ Run the Production Build Command**
+### **Run the Production Build Command**
 ```sh
 npm run build
 npm install -g serve

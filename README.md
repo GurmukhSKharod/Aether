@@ -97,6 +97,6 @@ serve -s build
 
 Frontend will be available at **http://localhost:3000** 🎮
 
-
+---
 
 **Enjoy exploring space in Aether! 🌌✨**

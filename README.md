@@ -15,13 +15,13 @@ Aether is a **real-time space exploration game** that dynamically displays celes
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)     **Supabase (PostgreSQL)**: Stores celestial data.
 
 ### **APIs Used** 
-(https://api.nasa.gov/neo/)  
+![Node.js]([https://api.nasa.gov/neo/](https://api.nasa.gov/))  
 **NASA NEO API**: Retrieves real-time data on **near-Earth asteroids**, including size, mass, and distance from Earth.  
 
-(https://api.nasa.gov/EPIC/)  
+![Node.js]([https://api.nasa.gov/EPIC/](https://api.nasa.gov/))  
 **NASA EPIC API**: Fetches **high-resolution Earth images** taken by the **Deep Space Climate Observatory (DSCOVR)**.  
 
-(https://exoplanetarchive.ipac.caltech.edu/)  
+![Node.js]([https://exoplanetarchive.ipac.caltech.edu/](https://api.nasa.gov/))  
 **NASA Exoplanet Archive API**: Provides **exoplanet data**, including **mass, radius, and distance from their stars**.  
  
 

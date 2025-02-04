@@ -5,10 +5,23 @@ const { fetchAsteroids, fetchExoplanets, fetchEarthImages } = require("./service
 
 dotenv.config();
 const app = express();
-app.use(cors());
+const supabase = require("./supabaseClient");
+
+// Enable CORS with Specific Allowed Origins
+app.use(cors({
+    origin: ["http://localhost:3000", "https://aether-exploration.netlify.app"], // Replace with frontend URLs
+    methods: "GET,POST",
+    allowedHeaders: "Content-Type,Authorization"
+}));
+
 app.use(express.json());
 
-const supabase = require("./supabaseClient");
+// Debugging Middleware 
+app.use((req, res, next) => {
+    console.log(`Received request: ${req.method} ${req.url}`);
+    console.log("Headers:", req.headers);
+    next();
+});
 
 // API Routes
 app.get("/api/celestial", async (req, res) => {
@@ -26,4 +39,5 @@ app.get("/api/fetch-nasa", async (req, res) => {
 });
 
 // Start Server
-app.listen(5050, () => console.log(`Server running on port 5050`));
+const PORT = process.env.PORT || 5050;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

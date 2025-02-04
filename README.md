@@ -3,22 +3,22 @@ Aether is a **real-time multiplayer space exploration game** that dynamically up
 
 ### **🚀 Tech Stack**  
 ### **Frontend**  
-![React.js](https://img.shields.io/badge/React.js-61DAFB?style=for-the-badge&logo=react&logoColor=white) - **React.js**: Used to build the web-based game interface, rendering the UI components dynamically.  
-![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white) - **Three.js**: Enables real-time **3D rendering** of planets, asteroids, and space environments.  
-![Zustand](https://img.shields.io/badge/Zustand-FF9900?style=for-the-badge&logo=zustand&logoColor=white) - **Zustand**: Manages global state for player data, game settings, and celestial body interactions.  
-![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) - **React Router**: Handles navigation between the main game screen, user profile, and settings.  
-![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white) - **Axios**: Fetches NASA API data and sends requests to the backend for celestial body updates.  
+![React.js](https://img.shields.io/badge/React.js-61DAFB?style=for-the-badge&logo=react&logoColor=white) **React.js**: Used to build the web-based game interface, rendering the UI components dynamically.  
+![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white) **Three.js**: Enables real-time **3D rendering** of planets, asteroids, and space environments.  
+![Zustand](https://img.shields.io/badge/Zustand-FF9900?style=for-the-badge&logo=zustand&logoColor=white) **Zustand**: Manages global state for player data, game settings, and celestial body interactions.  
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) **React Router**: Handles navigation between the main game screen, user profile, and settings.  
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white) **Axios**: Fetches NASA API data and sends requests to the backend for celestial body updates.  
 
 ### **Backend**  
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) - **Node.js**: Handles the server-side logic, including API endpoints and WebSockets for multiplayer.  
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) - **Express.js**: Provides RESTful API endpoints for fetching and storing celestial bodies.  
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) - **Supabase (PostgreSQL)**: Stores celestial data, player progress, and planet claims.  
-![WebSockets](https://img.shields.io/badge/WebSockets-FF4500?style=for-the-badge&logo=websocket&logoColor=white) - **WebSockets**: Enables real-time multiplayer, allowing players to see each other in space.  
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) **Node.js**: Handles the server-side logic, including API endpoints and WebSockets for multiplayer.  
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) **Express.js**: Provides RESTful API endpoints for fetching and storing celestial bodies.  
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) **Supabase (PostgreSQL)**: Stores celestial data, player progress, and planet claims.  
+![WebSockets](https://img.shields.io/badge/WebSockets-FF4500?style=for-the-badge&logo=websocket&logoColor=white) **WebSockets**: Enables real-time multiplayer, allowing players to see each other in space.  
 
 ### **APIs Used**  
-![NASA API](https://img.shields.io/badge/NASA_API-4285F4?style=for-the-badge&logo=nasa&logoColor=white) - **NASA API**: Fetches real-time celestial data, including planets, moons, and exoplanets.  
-![Solar System API](https://img.shields.io/badge/Solar_System_API-FFD700?style=for-the-badge&logo=space&logoColor=white) - **Solar System API**: Provides data about real planetary orbits, masses, and distances.  
-![Asteroid NEO API](https://img.shields.io/badge/Asteroid_NEO_API-FF5733?style=for-the-badge&logo=meteor&logoColor=white) - **Asteroid NEO API**: Retrieves details on near-Earth asteroids and their trajectories.  
+![NASA API](https://img.shields.io/badge/NASA_API-4285F4?style=for-the-badge&logo=nasa&logoColor=white) **NASA API**: Fetches real-time celestial data, including planets, moons, and exoplanets.  
+![Solar System API](https://img.shields.io/badge/Solar_System_API-FFD700?style=for-the-badge&logo=space&logoColor=white) **Solar System API**: Provides data about real planetary orbits, masses, and distances.  
+![Asteroid NEO API](https://img.shields.io/badge/Asteroid_NEO_API-FF5733?style=for-the-badge&logo=meteor&logoColor=white) **Asteroid NEO API**: Retrieves details on near-Earth asteroids and their trajectories.  
 
 ---
 

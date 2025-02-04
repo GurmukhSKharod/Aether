@@ -10,7 +10,7 @@ Aether is a **real-time space exploration game** that dynamically displays celes
 
 
 ### **Backend**  
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)     **Node.js**: Handles the server-side logic, including API endpoints.
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)     **Node.js**: Handles the server-side logic, including API endpoints.  
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)     **Express.js**: Provides RESTful API endpoints for fetching and storing celestial bodies.  
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)     **Supabase (PostgreSQL)**: Stores celestial data.
 

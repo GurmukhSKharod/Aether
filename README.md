@@ -3,11 +3,11 @@ Aether is a **real-time multiplayer space exploration game** that dynamically up
 
 ### **🚀 Tech Stack**
 - **Frontend:**
-![React.js] - https://img.shields.io/badge/React.js-61DAFB?style=for-the-badge&logo=react&logoColor=white
-![Three.js] - https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white
-![Zustand] - https://img.shields.io/badge/Zustand-FF9900?style=for-the-badge&logo=zustand&logoColor=white
-![React Router] - https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white
-![Axios] - https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white
+![React.js]https://img.shields.io/badge/React.js-61DAFB?style=for-the-badge&logo=react&logoColor=white
+![Three.js]https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white
+![Zustand]https://img.shields.io/badge/Zustand-FF9900?style=for-the-badge&logo=zustand&logoColor=white
+![React Router]https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white
+![Axios]https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white
 
 - **Backend:**
 ![Node.js] - https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white

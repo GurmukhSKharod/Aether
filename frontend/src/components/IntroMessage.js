@@ -28,7 +28,7 @@ const IntroMessage = ({ onComplete }) => {
     return (
         <div className="intro-container">
             <p><strong><div className="title-in-intro">🌌Welcome to Aether!🌌</div></strong></p>
-            <p>🚀 <strong>Move</strong> using Arrow Keys or W/A/S/D.</p>
+            <p>🚀 <strong>Move</strong> using Arrow Keys or W/A/S/D to reveal the planets!</p>
             <p>🪐 <strong>Click planets</strong> to collect them and earn points!</p>
             <p className="real-nasa-data-text">📡 These planets are <strong>real NASA data!</strong></p>
             <p className="countdown">Message disappears in <strong>{countdown}</strong>...</p>

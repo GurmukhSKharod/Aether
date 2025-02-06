@@ -6,8 +6,7 @@ import IntroMessage from "../components/IntroMessage";
 import "../styles/SpaceCanvas.css";
 
 const randomColor = () => {
-    const colors = [
-        "#ff5733", "#33ff57", "#3357ff", "#ff33ff", "#f4a261", "#2a9d8f",
+    const colors = ["#ff5733", "#33ff57", "#3357ff", "#ff33ff", "#f4a261", "#2a9d8f",
         "#ffcc00", "#800080", "#00ffcc", "#ff99ff", "#ff6600", "#ff0066"
     ];
     return colors[Math.floor(Math.random() * colors.length)];
@@ -15,7 +14,7 @@ const randomColor = () => {
 
 const generatePlanetPositions = (celestialBodies) => {
     const positions = [];
-    const minDistance = 2000; // 🚀 Increased from 600 to 2000 for vast space
+    const minDistance = 2000;
     const maxAttempts = 200;
 
     celestialBodies.forEach((body) => {
@@ -27,6 +26,11 @@ const generatePlanetPositions = (celestialBodies) => {
             planet.y = Math.random() * (window.innerHeight * 10) - window.innerHeight * 5;
             planet.size = Math.sqrt(body.radius) * 2 + 30;
             planet.name = body.name;
+            planet.mass = body.mass ? (body.mass * 5.972e24).toExponential(2) + " kg" : "Unknown";
+            planet.distance = body.distance || "Unknown";
+            planet.type = body.type || "Unknown";
+            planet.visible = false;
+            planet.scale = 0; // 👈 Start small for animation
             attempts++;
         } while (positions.some(p => Math.hypot(planet.x - p.x, planet.y - p.y) < minDistance) && attempts < maxAttempts);
 
@@ -36,40 +40,32 @@ const generatePlanetPositions = (celestialBodies) => {
     return positions;
 };
 
-
 const SpaceCanvas = () => {
     const canvasRef = useRef(null);
     const celestialBodies = useCelestialData();
     const [score, setScore] = useState(0);
-    const [player, setPlayer] = useState({ x: 0, y: 0, size: 16 });
+    const [player, setPlayer] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2, size: 16 });
     const [planetColors, setPlanetColors] = useState({});
     const [clickedPlanets, setClickedPlanets] = useState(new Set());
     const [planetPositions, setPlanetPositions] = useState([]);
+    const [hoveredPlanet, setHoveredPlanet] = useState(null);
+    const [hoverPosition, setHoverPosition] = useState(null);
     const [showIntro, setShowIntro] = useState(true);
 
     const handleIntroComplete = useCallback(() => {
         setShowIntro(false);
     }, []);
 
-    // Generate planets when data loads
     useEffect(() => {
-        setPlanetPositions(generatePlanetPositions(celestialBodies)); 
+        setPlanetPositions(generatePlanetPositions(celestialBodies));
     }, [celestialBodies]);
 
-    // Set a random spawn for player
-    useEffect(() => {
-        setPlayer({ 
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            size: 16
-        });
-    }, []);
-
-    // Resize Canvas
     useEffect(() => {
         const resizeCanvas = () => {
-            canvasRef.current.width = window.innerWidth;
-            canvasRef.current.height = window.innerHeight;
+            if (canvasRef.current) {
+                canvasRef.current.width = window.innerWidth;
+                canvasRef.current.height = window.innerHeight;
+            }
             document.body.style.overflow = "hidden";
             document.body.style.backgroundColor = "black";
         };
@@ -79,7 +75,6 @@ const SpaceCanvas = () => {
         return () => window.removeEventListener("resize", resizeCanvas);
     }, []);
 
-    // Assign planet colors once
     useEffect(() => {
         const colors = {};
         celestialBodies.forEach((body) => {
@@ -88,7 +83,6 @@ const SpaceCanvas = () => {
         setPlanetColors(colors);
     }, [celestialBodies]);
 
-    // Handle Key Press to Move Player a Fixed Distance
     useEffect(() => {
         const movePlayer = (e) => {
             setPlayer((prev) => {
@@ -120,7 +114,6 @@ const SpaceCanvas = () => {
         };
     }, []);
 
-    // Filter planets in the viewport
     useEffect(() => {
         setPlanetPositions((prevPlanets) =>
             prevPlanets.map((planet) => {
@@ -130,70 +123,49 @@ const SpaceCanvas = () => {
                 const planetY = centerY + (planet.y - player.y);
 
                 const inView =
-                    planetX > -50 &&
-                    planetX < window.innerWidth + 50 &&
-                    planetY > -50 &&
-                    planetY < window.innerHeight + 50;
+                    planetX > -100 &&
+                    planetX < window.innerWidth + 100 &&
+                    planetY > -100 &&
+                    planetY < window.innerHeight + 100;
 
-                if (inView && !planet.visible) {
-                    return { ...planet, visible: true, scale: 0 }; // Appear when in view
-                } else if (!inView && planet.visible) {
-                    return { ...planet, visible: false }; // Remove when out of view
-                }
-
-                return planet;
+                return {
+                    ...planet,
+                    visible: inView,
+                    scale: inView ? Math.min(planet.scale + 0.05, 1) : 0 // 👈 Smoothly grow planets when they appear
+                };
             })
         );
     }, [player]);
 
-    // Animate planets appearing
-    useEffect(() => {
-        let animationFrame;
-        const animatePlanets = () => {
-            setPlanetPositions((prevPlanets) =>
-                prevPlanets.map((planet) => {
-                    if (planet.visible && planet.scale < 1) {
-                        return { ...planet, scale: Math.min(planet.scale + 0.05, 1) }; // Grow smoothly
-                    }
-                    return planet;
-                })
-            );
-            animationFrame = requestAnimationFrame(animatePlanets);
-        };
-
-        animatePlanets();
-        return () => cancelAnimationFrame(animationFrame);
-    }, []);
-
-    // Handle planet click to update score
-    const handleCanvasClick = (e) => {
+    const handleCanvasMouseMove = (e) => {
         const rect = canvasRef.current.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const clickY = e.clientY - rect.top;
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
 
-        setPlanetPositions((prevPlanets) =>
-            prevPlanets.map((planet) => {
-                const planetX = window.innerWidth / 2 + (planet.x - player.x);
-                const planetY = window.innerHeight / 2 + (planet.y - player.y);
-                const distance = Math.sqrt((clickX - planetX) ** 2 + (clickY - planetY) ** 2);
+        const hovered = planetPositions.find((planet) => {
+            if (!planet.visible) return false;
+            const planetX = window.innerWidth / 2 + (planet.x - player.x);
+            const planetY = window.innerHeight / 2 + (planet.y - player.y);
+            const distance = Math.sqrt((mouseX - planetX) ** 2 + (mouseY - planetY) ** 2);
+            return distance <= planet.size;
+        });
 
-                if (distance <= planet.size && !clickedPlanets.has(planet.name)) {
-                    setClickedPlanets((prev) => new Set(prev).add(planet.name));
-                    setScore((prev) => prev + 1);
-                    return { ...planet, isBouncing: true };
-                }
-                return planet;
-            })
-        );
-
-        setTimeout(() => {
-            setPlanetPositions((prevPlanets) =>
-                prevPlanets.map((planet) => ({ ...planet, isBouncing: false }))
-            );
-        }, 400);
+        if (hovered) {
+            setHoveredPlanet(hovered);
+            setHoverPosition({ x: mouseX + 20, y: mouseY - 50 });
+        } else {
+            setHoveredPlanet(null);
+            setHoverPosition(null);
+        }
     };
 
-    // Draw planets dynamically
+    const handleCanvasClick = () => {
+        if (hoveredPlanet && !clickedPlanets.has(hoveredPlanet.name)) {
+            setClickedPlanets((prev) => new Set(prev).add(hoveredPlanet.name));
+            setScore((prev) => prev + 1);
+        }
+    };
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -212,7 +184,7 @@ const SpaceCanvas = () => {
 
                 ctx.save();
                 ctx.translate(planetX, planetY);
-                ctx.scale(planet.scale, planet.scale);
+                ctx.scale(planet.scale, planet.scale); // 👈 Apply scale animation
                 ctx.translate(-planetX, -planetY);
 
                 ctx.beginPath();
@@ -221,13 +193,13 @@ const SpaceCanvas = () => {
                 ctx.fill();
                 ctx.strokeStyle = "#ffffff";
                 ctx.stroke();
-                
-                ctx.restore();
 
                 ctx.fillStyle = "white";
                 ctx.font = "14px Arial";
                 ctx.textAlign = "center";
                 ctx.fillText(planet.name, planetX, planetY + planet.size + 20);
+
+                ctx.restore();
             });
 
             Player(ctx, centerX, centerY, player.size);
@@ -241,7 +213,30 @@ const SpaceCanvas = () => {
         <>
             {showIntro && <IntroMessage onComplete={handleIntroComplete} />}
             <Hud score={score} />
-            <canvas ref={canvasRef} onClick={handleCanvasClick} />
+            <canvas ref={canvasRef} onClick={handleCanvasClick} onMouseMove={handleCanvasMouseMove} />
+
+            {hoveredPlanet && hoverPosition && (
+            <div className="hover-card"
+                style={{
+                    position: "absolute",
+                    left: `${hoverPosition.x}px`,
+                    top: `${hoverPosition.y}px`,
+                    backgroundColor: "black",
+                    color: "white",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    border: "1px solid white",
+                    transform: "scale(0.8)", // Start small
+                    transition: "transform 0.3s ease-out" // Smooth scaling effect
+                }}
+                >
+                <h3 style={{ color: "purple", marginBottom: "5px" }}>{hoveredPlanet.name}</h3>
+                <p><strong>Type:</strong> {hoveredPlanet.type}</p>
+                <p><strong>Mass:</strong> {hoveredPlanet.mass}</p>
+                <p><strong>Size:</strong> {hoveredPlanet.size.toFixed(2)} km</p>
+                <p><strong>Coordinates:</strong> X: {hoveredPlanet.x.toFixed(1)}, Y: {hoveredPlanet.y.toFixed(1)}</p>
+            </div>
+            )}
         </>
     );
 };

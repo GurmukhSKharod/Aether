@@ -30,7 +30,7 @@ const generatePlanetPositions = (celestialBodies) => {
             planet.distance = body.distance || "Unknown";
             planet.type = body.type || "Unknown";
             planet.visible = false;
-            planet.scale = 0; // 👈 Start small for animation
+            planet.scale = 0;
             attempts++;
         } while (positions.some(p => Math.hypot(planet.x - p.x, planet.y - p.y) < minDistance) && attempts < maxAttempts);
 
@@ -131,7 +131,7 @@ const SpaceCanvas = () => {
                 return {
                     ...planet,
                     visible: inView,
-                    scale: inView ? Math.min(planet.scale + 0.05, 1) : 0 // 👈 Smoothly grow planets when they appear
+                    scale: inView ? Math.min(planet.scale + 0.05, 1) : 0 // Smoothly grow planets when they appear
                 };
             })
         );
@@ -184,7 +184,7 @@ const SpaceCanvas = () => {
 
                 ctx.save();
                 ctx.translate(planetX, planetY);
-                ctx.scale(planet.scale, planet.scale); // 👈 Apply scale animation
+                ctx.scale(planet.scale, planet.scale); 
                 ctx.translate(-planetX, -planetY);
 
                 ctx.beginPath();

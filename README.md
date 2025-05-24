@@ -74,7 +74,7 @@ Replace `DEMO_KEY` with your actual **NASA API key** from [https://api.nasa.gov]
 node server.js
 curl http://localhost:5050/api/fetch-nasa  # Fetch NASA data manually
 ```
-Backend will now be running on **http://localhost:5050** 🚀
+Backend will now be running on **http://localhost:5050**
 
 ---
 
@@ -114,7 +114,7 @@ assuming you have the **correct env setup** previously described in step 6 for t
 ```sh
 npm start
 ```
-Frontend will be available at **http://localhost:3000** 🎮
+Frontend will be available at **http://localhost:3000**
 
 ---
 
@@ -128,8 +128,8 @@ npm install -g serve
 serve -s build
 ```
 
-Frontend will be available at **http://localhost:3000** 🎮
+Frontend will be available at **http://localhost:3000**
 
 ---
 
-**Enjoy exploring space in Aether! 🌌✨**
+**Enjoy exploring space in Aether! **

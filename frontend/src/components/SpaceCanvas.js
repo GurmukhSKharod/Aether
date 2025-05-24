@@ -52,6 +52,25 @@ const SpaceCanvas = () => {
     const [hoverPosition, setHoverPosition] = useState(null);
     const [showIntro, setShowIntro] = useState(true);
 
+    // Block browser zoom (Ctrl + +/- and Ctrl + wheel)
+    useEffect(() => {
+        const onKeyDown = (e) => {
+          if (e.ctrlKey && ['=', '+', '-', '0'].includes(e.key)) {
+            e.preventDefault();
+          }
+        };
+        const onWheel = (e) => {
+          if (e.ctrlKey) e.preventDefault();
+        };
+        
+        window.addEventListener('keydown', onKeyDown, { passive: false });
+        window.addEventListener('wheel', onWheel, { passive: false });
+        return () => {
+          window.removeEventListener('keydown', onKeyDown);
+          window.removeEventListener('wheel', onWheel);
+        };
+    }, []);
+
     const handleIntroComplete = useCallback(() => {
         setShowIntro(false);
     }, []);

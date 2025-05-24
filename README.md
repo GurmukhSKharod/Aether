@@ -1,4 +1,4 @@
-## **🌌 Aether – Real Space Exploration Game**  
+## **Aether – Real Space Exploration Game**  
 Aether is a **real-time space exploration game** that dynamically displays celestial bodies using **real NASA data**. Built with **React**, it lets players **navigate space, click planets to collect them, and track scores in a real NASA-generated universe**.  
 
 
@@ -10,7 +10,7 @@ The Database server is hosted via supabase: https://supabase.com/
  
 ---
 
-### **🚀 Tech Stack**  
+### **Tech Stack**  
 ### **Frontend**  
 ![React.js](https://img.shields.io/badge/React.js-61DAFB?style=for-the-badge&logo=react&logoColor=white)     **React.js**: Used to build the web-based game interface, rendering the UI components dynamically.  
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) **JavaScript**: Core language for the frontend logic and game mechanics.  
@@ -29,12 +29,12 @@ The Database server is hosted via supabase: https://supabase.com/
  
 **NASA Exoplanet Archive API**: Provides **exoplanet data**, including **mass, radius, and distance from their stars**. 
 
-Check out the NASA API Page: 🌍 https://api.nasa.gov/
+Check out the NASA API Page: https://api.nasa.gov/
  
 
 ---
 
-## **🌍 Features**  
+## **Features**  
 ✔ **Real NASA data** – Planets and names are from NASA APIs  
 ✔ **HUD Interface** – Displays score, player icon, and game title  
 ✔ **Player Movement** – Navigate using **Arrow Keys** or **W/A/S/D**  

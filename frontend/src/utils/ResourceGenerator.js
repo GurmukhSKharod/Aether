@@ -34,7 +34,15 @@ export const resources = [
 ];
 
 // weights for the rarities
-const weights = { common:5, uncommon:10, rare:25, unique:100 };
+export const weights = { common:5, uncommon:10, rare:25, unique:100 };
+
+// when you pick a resource, you get *this many units* at once:
+const amountRanges = {
+  common:   [10, 20],
+  uncommon: [5,  10],
+  rare:     [3,   5],
+  unique:   [1,   1],
+};
 
 function weightedRandom(items) {
   const total = items.reduce((sum,i)=>sum+weights[i.rarity],0);
@@ -46,9 +54,20 @@ function weightedRandom(items) {
   return items[items.length-1];
 }
 
-/** returns a random resource object */
-export function getRandomResource(){
-  return weightedRandom(resources);
+/** returns a random resource object WITH an `amount` field */
+export function getRandomResource() {
+  const picked = weightedRandom(resources);
+  const [min, max] = amountRanges[picked.rarity];
+  const amount = Math.floor(Math.random() * (max - min + 1)) + min;
+  const weight = weights[picked.rarity];
+
+  return {
+    name:   picked.name,
+    rarity: picked.rarity,
+    color:  picked.color,
+    amount,     // how many units you just picked
+    weight      // per‐unit weight
+  };
 }
 
 /** lookup name→color for inventory rendering */

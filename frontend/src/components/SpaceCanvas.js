@@ -54,7 +54,7 @@ const SpaceCanvas = () => {
     const [hoverPosition, setHoverPosition] = useState(null);
     const [showIntro, setShowIntro] = useState(true);
 
-    // *** Inventory state: map from resourceName → count ***
+    // *** Inventory state: map from resourceName →  { pickups, totalWeight }  ***
     const [inventory, setInventory] = useState({});
 
     // *** Panel open/closed flag ***
@@ -206,16 +206,26 @@ const SpaceCanvas = () => {
             setScore((s) => s + 1);
 
             // 2) Pick a random resource & increment inventory
-            const res = getRandomResource();           // → { name, rarity, color }
-            setInventory((inv) => ({
-            ...inv,
-            [res.name]: (inv[res.name] || 0) + 1,
-            }));
+            const res = getRandomResource();           // → {  name, amount, weight, color, rarity }
+            setInventory(inv => {
+                const prev = inv[res.name] || { pickups: 0, totalWeight: 0 };
 
-            // 3) Trigger the “+1 ResourceName” pop‐up
+                const pickups    = prev.pickups + res.amount;
+                const totalWeight = prev.totalWeight + (res.amount * res.weight);
+
+                return {
+                    ...inv,
+                    [res.name]: {
+                        pickups,
+                        totalWeight
+                    }
+                };
+            });
+
+            // 3) Trigger the “+amount ResourceName” pop‐up
             // setPickupFeedback({ 
             // name:   res.name, 
-            // amount: 1, 
+            // amount: res.amount, 
             // color:  res.color 
             // });
 

@@ -1,13 +1,18 @@
+/* InventoryPanel.css */
+
+/* ————————————————————————————
+   PANEL CONTAINER
+   ———————————————————————————— */
 .inventory-panel {
   position: fixed;
   top: 0;
   right: 0;
-  width: 25vw;
-  max-width: 350px;
+  width: 400px;
+  max-width: 400px;
   height: 100vh;
   background: rgba(20,20,20,0.95);
   color: white;
-  padding: 20px;
+  padding: 20px;            /* equal padding on all sides */
   box-sizing: border-box;
   overflow-y: auto;
   transform: translateX(100%);
@@ -17,43 +22,99 @@
 .inventory-panel.open {
   transform: translateX(0);
 }
+
+/* ————————————————————————————
+   CLOSE BUTTON & HEADER
+   ———————————————————————————— */
 .inventory-close {
   background: transparent;
   border: none;
   color: white;
   font-size: 24px;
-  float: right;
   cursor: pointer;
+  align-self: flex-end;       /* move to the far right within the flex header */
 }
+
+.inventory-panel > h2 {
+  margin: 8px auto 16px;      /* center the title */
+  font-size: 24px;
+  text-align: center;
+}
+
+/* wrap close + title in a flex container */
+.inventory-panel {
+  display: flex;
+  flex-direction: column;
+}
+.inventory-panel > .inventory-close,
+.inventory-panel > h2 {
+  /* items in the header row */
+  display: inline-block;
+}
+
+/* ————————————————————————————
+   ITEMS GRID
+   ———————————————————————————— */
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 8px;
 }
+
+/* ————————————————————————————
+   SINGLE ITEM CARD
+   ———————————————————————————— */
 .inventory-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: rgba(255,255,255,0.05);
   border-radius: 8px;
-  padding: 8px;
-  text-align: center;
+  padding: 12px;              /* a bit more padding for balance */
+  box-sizing: border-box;
 }
+
+/* circular icon */
 .item-icon {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto 8px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
+  margin-bottom: 12px;
 }
+
+/* item name */
 .item-name {
-  font-size: 14px;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+/* ————————————————————————————
+   COUNT & WEIGHT ROWS
+   ———————————————————————————— */
+.item-count,
+.item-weight {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;  /* label left, value right */
+  padding: 0 8px;                  /* inset to match card padding */
   margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: #ccc;
 }
-.item-count {
-  font-size: 12px;
-  opacity: 0.8;
+
+/* emphasize the numbers */
+.item-count .value,
+.item-weight .value {
+  font-weight: bold;
+  color: #fff;
 }
+
+/* when there are no items yet */
 .empty {
   grid-column: 1 / -1;
   text-align: center;
-  margin-top: 50px;
-  opacity: 0.6;
+  color: #777;
+  margin-top: 40px;
 }

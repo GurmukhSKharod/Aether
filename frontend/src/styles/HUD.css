@@ -1,11 +1,16 @@
+/* Wrapper that holds both HUD + XPBar */
+.hud-wrapper {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-width: 800px;
+  min-width: 400px;
+  z-index: 20;            /* above canvas, above XPBar */
+}
+
 .hud-container {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70%;
-    max-width: 800px;
-    min-width: 400px;
     background: rgba(20, 20, 20, 0.9);
     padding: 15px 25px;
     display: flex;
@@ -16,7 +21,7 @@
     font-family: Arial, sans-serif;
     font-size: 22px;
     box-shadow: 0 6px 14px rgba(255, 255, 255, 0.3);
-    z-index: 10;
+    margin-bottom: 8px;
 }
 
 .hud-item {

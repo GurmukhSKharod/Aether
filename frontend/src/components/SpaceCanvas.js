@@ -6,6 +6,8 @@ import IntroMessage from "../components/IntroMessage";
 import InventoryPanel from "./InventoryPanel/InventoryPanel";
 import { getRandomResource } from "../utils/ResourceGenerator";
 import "../styles/SpaceCanvas.css";
+import useXp from "../hooks/useXp";
+
 
 const randomColor = () => {
     const colors = ["#ff5733", "#33ff57", "#3357ff", "#ff33ff", "#f4a261", "#2a9d8f",
@@ -71,6 +73,8 @@ const SpaceCanvas = () => {
     // structured floating resource state:
     // { name: string, amount: number, color: string } | null
     const [floatingResource, setFloatingResource] = useState(null);
+
+    const [xp, level, addXp] = useXp();
 
 
     // Block browser zoom (Ctrl + +/- and Ctrl + wheel)
@@ -222,6 +226,8 @@ const SpaceCanvas = () => {
                 };
             });
 
+            addXp(res.rarity); // Awards xp based on resource rarity
+
             // 3) Trigger the “+amount ResourceName” pop‐up
             // setPickupFeedback({ 
             // name:   res.name, 
@@ -291,6 +297,8 @@ const SpaceCanvas = () => {
                 score={0} 
                 onInventoryToggle={toggleInv}
                 floatingResource={floatingResource}
+                xp={xp}
+                level={level}
             />
             {/* {pickupFeedback && (
                 <div

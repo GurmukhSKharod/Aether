@@ -83,6 +83,65 @@
     animation: floatUp 0.6s ease-out forwards;
 }
 
+.hud-item.hud-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.hud-btn {
+  background:none;
+  border:none;
+  color:#fff;
+  cursor:pointer;
+  font-size:22px;
+}
+
+/* ---------------- Inventory Button ---------------- */
+
+.hud-btn.inventory-btn {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, text-shadow 0.2s ease;
+  /*position: relative; for positioning floatingResource if needed */
+}
+
+/* Hover: purple glow around the text and border */
+.hud-btn.inventory-btn:hover {
+  border-color: #a05cf5;
+  text-shadow:
+    0 0 4px #a05cf5,
+    0 0 8px #a05cf5,
+    0 0 12px #a05cf5;
+}
+
+/* inline floating text */
+.hud-floating {
+  margin-left: 12px;
+  margin-right: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  animation: floatUp 0.7s ease-out forwards;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Floating resource popup next to the button */
+.floating-resource {
+  position: absolute;
+  right: -60px; /* adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  font-weight: bold;
+  animation: floatUp 0.6s ease-out forwards;
+}
+
 @keyframes floatUp {
     0% { opacity: 1; transform: translateY(0); }
     100% { opacity: 0; transform: translateY(-20px); }

@@ -3,6 +3,8 @@ import useCelestialData from "../hooks/useCelestialData";
 import Player from "../components/Player";
 import Hud from "../components/Hud";  
 import IntroMessage from "../components/IntroMessage";  
+import InventoryPanel from "./InventoryPanel/InventoryPanel";
+import { getRandomResource } from "../utils/ResourceGenerator";
 import "../styles/SpaceCanvas.css";
 
 const randomColor = () => {
@@ -51,6 +53,25 @@ const SpaceCanvas = () => {
     const [hoveredPlanet, setHoveredPlanet] = useState(null);
     const [hoverPosition, setHoverPosition] = useState(null);
     const [showIntro, setShowIntro] = useState(true);
+
+    // *** Inventory state: map from resourceName → count ***
+    const [inventory, setInventory] = useState({});
+
+    // *** Panel open/closed flag ***
+    const [isInvOpen, setIsInvOpen] = useState(false);
+
+    // *** Toggler: flips the flag, wrapped in useCallback so it never re-creates ***
+    const toggleInv = useCallback(() => {
+        setIsInvOpen(open => !open);
+    }, []);
+
+    const [pickupFeedback, setPickupFeedback] = useState(null);
+    // { name: string, amount: number, color: string }
+
+    // structured floating resource state:
+    // { name: string, amount: number, color: string } | null
+    const [floatingResource, setFloatingResource] = useState(null);
+
 
     // Block browser zoom (Ctrl + +/- and Ctrl + wheel)
     useEffect(() => {
@@ -180,10 +201,34 @@ const SpaceCanvas = () => {
 
     const handleCanvasClick = () => {
         if (hoveredPlanet && !clickedPlanets.has(hoveredPlanet.name)) {
+            // 1) Mark planet clicked & award a point (if you still want points)
             setClickedPlanets((prev) => new Set(prev).add(hoveredPlanet.name));
-            setScore((prev) => prev + 1);
+            setScore((s) => s + 1);
+
+            // 2) Pick a random resource & increment inventory
+            const res = getRandomResource();           // → { name, rarity, color }
+            setInventory((inv) => ({
+            ...inv,
+            [res.name]: (inv[res.name] || 0) + 1,
+            }));
+
+            // 3) Trigger the “+1 ResourceName” pop‐up
+            // setPickupFeedback({ 
+            // name:   res.name, 
+            // amount: 1, 
+            // color:  res.color 
+            // });
+
+            // // 4) Clear it after the animation finishes
+            // setTimeout(() => setPickupFeedback(null), 1000);
+
+            // show floating text
+            //const text = `+${res.amount} ${res.name}`;
+            setFloatingResource({ name: res.name, amount: res.amount, color: res.color });
+            setTimeout(() => setFloatingResource(null), 700);
         }
     };
+
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -231,7 +276,20 @@ const SpaceCanvas = () => {
     return (
         <>
             {showIntro && <IntroMessage onComplete={handleIntroComplete} />}
-            <Hud score={score} />
+            {/*<Hud score={score} />*/}
+            <Hud 
+                score={0} 
+                onInventoryToggle={toggleInv}
+                floatingResource={floatingResource}
+            />
+            {pickupFeedback && (
+                <div
+                    className="pickup-feedback"
+                    style={{ color: pickupFeedback.color }}
+                >
+                    +{pickupFeedback.amount} {pickupFeedback.name}
+                </div>
+            )}
             <canvas ref={canvasRef} onClick={handleCanvasClick} onMouseMove={handleCanvasMouseMove} />
 
             {hoveredPlanet && hoverPosition && (
@@ -256,6 +314,13 @@ const SpaceCanvas = () => {
                 <p><strong>Coordinates:</strong> X: {hoveredPlanet.x.toFixed(1)}, Y: {hoveredPlanet.y.toFixed(1)}</p>
             </div>
             )}
+
+            {/* Inventory side‐panel */}
+            <InventoryPanel
+                open={isInvOpen}
+                items={inventory}
+                onClose={toggleInv}
+            />
         </>
     );
 };

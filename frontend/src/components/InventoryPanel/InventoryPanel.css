@@ -1,0 +1,59 @@
+.inventory-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 25vw;
+  max-width: 350px;
+  height: 100vh;
+  background: rgba(20,20,20,0.95);
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+  z-index: 20;
+}
+.inventory-panel.open {
+  transform: translateX(0);
+}
+.inventory-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  float: right;
+  cursor: pointer;
+}
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+.inventory-item {
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+}
+.item-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+}
+.item-name {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.item-count {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 50px;
+  opacity: 0.6;
+}

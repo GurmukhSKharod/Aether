@@ -45,7 +45,7 @@ const generatePlanetPositions = (celestialBodies) => {
 const SpaceCanvas = () => {
     const canvasRef = useRef(null);
     const celestialBodies = useCelestialData();
-    const [score, setScore] = useState(0);
+    //const [score, setScore] = useState(0);
     const [player, setPlayer] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2, size: 16 });
     const [planetColors, setPlanetColors] = useState({});
     const [clickedPlanets, setClickedPlanets] = useState(new Set());
@@ -65,7 +65,7 @@ const SpaceCanvas = () => {
         setIsInvOpen(open => !open);
     }, []);
 
-    const [pickupFeedback, setPickupFeedback] = useState(null);
+    //const [pickupFeedback, setPickupFeedback] = useState(null);
     // { name: string, amount: number, color: string }
 
     // structured floating resource state:
@@ -203,7 +203,7 @@ const SpaceCanvas = () => {
         if (hoveredPlanet && !clickedPlanets.has(hoveredPlanet.name)) {
             // 1) Mark planet clicked & award a point (if you still want points)
             setClickedPlanets((prev) => new Set(prev).add(hoveredPlanet.name));
-            setScore((s) => s + 1);
+            //setScore((s) => s + 1);
 
             // 2) Pick a random resource & increment inventory
             const res = getRandomResource();           // → {  name, amount, weight, color, rarity }
@@ -292,14 +292,14 @@ const SpaceCanvas = () => {
                 onInventoryToggle={toggleInv}
                 floatingResource={floatingResource}
             />
-            {pickupFeedback && (
+            {/* {pickupFeedback && (
                 <div
                     className="pickup-feedback"
                     style={{ color: pickupFeedback.color }}
                 >
                     +{pickupFeedback.amount} {pickupFeedback.name}
                 </div>
-            )}
+            )} */}
             <canvas ref={canvasRef} onClick={handleCanvasClick} onMouseMove={handleCanvasMouseMove} />
 
             {hoveredPlanet && hoverPosition && (

@@ -212,7 +212,7 @@ const SpaceCanvas = () => {
             // 2) Pick a random resource & increment inventory
             const res = getRandomResource();           // → {  name, amount, weight, color, rarity }
             setInventory(inv => {
-                const prev = inv[res.name] || { pickups: 0, totalWeight: 0 };
+                const prev = inv[res.name] || { pickups: 0, totalWeight: 0, rarity: res.rarity };
 
                 const pickups    = prev.pickups + res.amount;
                 const totalWeight = prev.totalWeight + (res.amount * res.weight);
@@ -221,7 +221,8 @@ const SpaceCanvas = () => {
                     ...inv,
                     [res.name]: {
                         pickups,
-                        totalWeight
+                        totalWeight,
+                        rarity: res.rarity
                     }
                 };
             });

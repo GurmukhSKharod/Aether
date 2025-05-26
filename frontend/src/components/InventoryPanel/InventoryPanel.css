@@ -85,10 +85,18 @@
 
 /* item name */
 .item-name {
-  font-size: 1rem;
+  font-size: 1.15rem;
   color: #fff;
   margin-bottom: 8px;
 }
+
+/* NEW rarity label */
+.item-rarity {
+  font-size: 1rem;
+  text-transform: capitalize;
+  margin-bottom: 6px;
+}
+
 
 /* ————————————————————————————
    COUNT & WEIGHT ROWS

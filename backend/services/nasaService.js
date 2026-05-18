@@ -9,24 +9,19 @@ const fetchAsteroids = async () => {
         const res = await axios.get(`https://api.nasa.gov/neo/rest/v1/feed?api_key=${NASA_API_KEY}`);
         const asteroids = res.data.near_earth_objects;
 
-        const { data, error } = await supabase
-        .from("celestial_bodies")
-        .upsert({
-            name: asteroid.name,
-            type: "Asteroid",
-            mass: asteroid.estimated_diameter.kilometers.estimated_diameter_max,
-            radius: asteroid.estimated_diameter.kilometers.estimated_diameter_max / 2,
-            distance: asteroid.close_approach_data[0]?.miss_distance.kilometers,
-            position_x: Math.random() * 1000,
-            position_y: Math.random() * 1000,
-        })
-        .select();
-
-    if (error) {
-        console.error("Supabase insert error:", error);
-    } else {
-        console.log("Inserted asteroid:", data);
-    }
+        for (const date in asteroids) {
+            for (const asteroid of asteroids[date]) {
+                await supabase.from("celestial_bodies").upsert({
+                    name: asteroid.name,
+                    type: "Asteroid",
+                    mass: asteroid.estimated_diameter.kilometers.estimated_diameter_max,
+                    radius: asteroid.estimated_diameter.kilometers.estimated_diameter_max / 2,
+                    distance: asteroid.close_approach_data[0]?.miss_distance.kilometers,
+                    position_x: Math.random() * 1000,
+                    position_y: Math.random() * 1000,
+                });
+            }
+        }
 
         console.log("Asteroids Data Synced!");
     } catch (error) {

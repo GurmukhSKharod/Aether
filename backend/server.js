@@ -55,8 +55,8 @@ app.get("/api/celestial", async (req, res) => {
 app.get("/api/fetch-nasa", async (req, res) => {
     try {
         await fetchAsteroids();
-        //await fetchExoplanets();
-        //await fetchEarthImages();
+        await fetchExoplanets();
+        await fetchEarthImages();
         res.json({ message: "NASA data fetched successfully!" });
     } catch (err) {
         console.error("Error fetching NASA data:", err);

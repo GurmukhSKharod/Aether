@@ -17,16 +17,50 @@ const randomColor = () => {
 
     return colors[Math.floor(Math.random() * colors.length)];
 };
+const planetStyles = ["solid", "striped", "rocky", "rainbow", "glow"];
+
+const randomPlanetStyle = () => {
+    return planetStyles[Math.floor(Math.random() * planetStyles.length)];
+};
+
+const randomPlanetColors = () => {
+    const colors = [
+        "#ff5733", "#33ff57", "#3357ff", "#ff33ff",
+        "#f4a261", "#2a9d8f", "#ffcc00", "#800080",
+        "#00ffcc", "#ff99ff", "#ff6600", "#ff0066",
+        "#8ecae6", "#219ebc", "#fb8500", "#adb5bd"
+    ];
+
+    const color1 = colors[Math.floor(Math.random() * colors.length)];
+    const color2 = colors[Math.floor(Math.random() * colors.length)];
+    const color3 = colors[Math.floor(Math.random() * colors.length)];
+
+    return { color1, color2, color3 };
+};
 
 const generatePlanetPositions = (celestialBodies) => {
     const positions = [];
-    const minDistance = 250;
-    const maxAttempts = 1000;
+    const expandedBodies = [];
 
-    const worldWidth = window.innerWidth * 5;
-    const worldHeight = window.innerHeight * 5;
+    if (!celestialBodies || celestialBodies.length === 0) {
+        return positions;
+    }
 
-    celestialBodies.forEach((body) => {
+    for (let i = 0; i < 500; i++) {
+        const randomBody =
+            celestialBodies[Math.floor(Math.random() * celestialBodies.length)];
+
+        expandedBodies.push({
+            ...randomBody
+        });
+    }
+
+    const minDistance = 180;
+    const maxAttempts = 100;
+    const worldWidth = window.innerWidth * 10;
+    const worldHeight = window.innerHeight * 10;
+
+    expandedBodies.forEach((body) => {
         let planet = {};
         let attempts = 0;
 
@@ -36,7 +70,7 @@ const generatePlanetPositions = (celestialBodies) => {
 
             planet.size = Math.min(
                 Math.sqrt(body.radius || 100) * 2 + 30,
-                120
+                90
             );
 
             planet.name = body.name;
@@ -46,6 +80,9 @@ const generatePlanetPositions = (celestialBodies) => {
 
             planet.distance = body.distance || "Unknown";
             planet.type = body.type || "Unknown";
+
+            planet.style = randomPlanetStyle();
+            planet.colors = randomPlanetColors();
 
             planet.visible = false;
             planet.scale = 0;
@@ -62,8 +99,8 @@ const generatePlanetPositions = (celestialBodies) => {
     });
 
     if (positions.length > 0) {
-        positions[0].x = 0;
-        positions[0].y = 0;
+        positions[0].x = window.innerWidth / 2;
+        positions[0].y = window.innerHeight / 2;
         positions[0].visible = true;
         positions[0].scale = 1;
     }
@@ -332,8 +369,68 @@ const SpaceCanvas = () => {
 
                 ctx.beginPath();
                 ctx.arc(planetX, planetY, planet.size, 0, 2 * Math.PI);
-                ctx.fillStyle = planetColors[planet.name] || "#ffffff";
+
+                if (planet.style === "striped") {
+                    const gradient = ctx.createLinearGradient(
+                        planetX - planet.size,
+                        planetY,
+                        planetX + planet.size,
+                        planetY
+                    );
+                    gradient.addColorStop(0, planet.colors.color1);
+                    gradient.addColorStop(0.35, planet.colors.color2);
+                    gradient.addColorStop(0.7, planet.colors.color1);
+                    gradient.addColorStop(1, planet.colors.color3);
+                    ctx.fillStyle = gradient;
+                } else if (planet.style === "rainbow") {
+                    const gradient = ctx.createRadialGradient(
+                        planetX,
+                        planetY,
+                        5,
+                        planetX,
+                        planetY,
+                        planet.size
+                    );
+                    gradient.addColorStop(0, planet.colors.color1);
+                    gradient.addColorStop(0.5, planet.colors.color2);
+                    gradient.addColorStop(1, planet.colors.color3);
+                    ctx.fillStyle = gradient;
+                } else if (planet.style === "rocky") {
+                    const gradient = ctx.createRadialGradient(
+                        planetX - planet.size / 3,
+                        planetY - planet.size / 3,
+                        5,
+                        planetX,
+                        planetY,
+                        planet.size
+                    );
+                    gradient.addColorStop(0, "#ffffff");
+                    gradient.addColorStop(0.25, planet.colors.color1);
+                    gradient.addColorStop(0.65, planet.colors.color2);
+                    gradient.addColorStop(1, "#222222");
+                    ctx.fillStyle = gradient;
+                } else if (planet.style === "glow") {
+                    const gradient = ctx.createRadialGradient(
+                        planetX,
+                        planetY,
+                        5,
+                        planetX,
+                        planetY,
+                        planet.size
+                    );
+                    gradient.addColorStop(0, "#ffffff");
+                    gradient.addColorStop(0.4, planet.colors.color1);
+                    gradient.addColorStop(1, planet.colors.color2);
+                    ctx.fillStyle = gradient;
+                    ctx.shadowColor = planet.colors.color1;
+                    ctx.shadowBlur = 20;
+                } else {
+                    ctx.fillStyle = planet.colors.color1;
+                }
+
                 ctx.fill();
+                ctx.shadowBlur = 0;
+
                 ctx.strokeStyle = "#ffffff";
                 ctx.stroke();
 

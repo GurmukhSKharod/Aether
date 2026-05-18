@@ -1,45 +1,72 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import useCelestialData from "../hooks/useCelestialData";
 import Player from "../components/Player";
-import Hud from "../components/Hud";  
-import IntroMessage from "../components/IntroMessage";  
+import Hud from "../components/Hud";
+import IntroMessage from "../components/IntroMessage";
 import InventoryPanel from "./InventoryPanel/InventoryPanel";
+import ShopPanel from "./ShopPanel/ShopPanel";
 import { getRandomResource } from "../utils/ResourceGenerator";
 import "../styles/SpaceCanvas.css";
 import useXp from "../hooks/useXp";
 
-
 const randomColor = () => {
-    const colors = ["#ff5733", "#33ff57", "#3357ff", "#ff33ff", "#f4a261", "#2a9d8f",
+    const colors = [
+        "#ff5733", "#33ff57", "#3357ff", "#ff33ff", "#f4a261", "#2a9d8f",
         "#ffcc00", "#800080", "#00ffcc", "#ff99ff", "#ff6600", "#ff0066"
     ];
+
     return colors[Math.floor(Math.random() * colors.length)];
 };
 
 const generatePlanetPositions = (celestialBodies) => {
     const positions = [];
-    const minDistance = 2000;
-    const maxAttempts = 200;
+    const minDistance = 250;
+    const maxAttempts = 1000;
+
+    const worldWidth = window.innerWidth * 5;
+    const worldHeight = window.innerHeight * 5;
 
     celestialBodies.forEach((body) => {
         let planet = {};
         let attempts = 0;
 
         do {
-            planet.x = Math.random() * (window.innerWidth * 10) - window.innerWidth * 5;
-            planet.y = Math.random() * (window.innerHeight * 10) - window.innerHeight * 5;
-            planet.size = Math.sqrt(body.radius) * 2 + 30;
+            planet.x = Math.random() * worldWidth - worldWidth / 2;
+            planet.y = Math.random() * worldHeight - worldHeight / 2;
+
+            planet.size = Math.min(
+                Math.sqrt(body.radius || 100) * 2 + 30,
+                120
+            );
+
             planet.name = body.name;
-            planet.mass = body.mass ? (body.mass * 5.972e24).toExponential(2) + " kg" : "Unknown";
+            planet.mass = body.mass
+                ? (body.mass * 5.972e24).toExponential(2) + " kg"
+                : "Unknown";
+
             planet.distance = body.distance || "Unknown";
             planet.type = body.type || "Unknown";
+
             planet.visible = false;
             planet.scale = 0;
+
             attempts++;
-        } while (positions.some(p => Math.hypot(planet.x - p.x, planet.y - p.y) < minDistance) && attempts < maxAttempts);
+        } while (
+            positions.some(
+                (p) => Math.hypot(planet.x - p.x, planet.y - p.y) < minDistance
+            ) &&
+            attempts < maxAttempts
+        );
 
         positions.push(planet);
     });
+
+    if (positions.length > 0) {
+        positions[0].x = 0;
+        positions[0].y = 0;
+        positions[0].visible = true;
+        positions[0].scale = 1;
+    }
 
     return positions;
 };
@@ -47,8 +74,13 @@ const generatePlanetPositions = (celestialBodies) => {
 const SpaceCanvas = () => {
     const canvasRef = useRef(null);
     const celestialBodies = useCelestialData();
-    //const [score, setScore] = useState(0);
-    const [player, setPlayer] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2, size: 16 });
+
+    const [player, setPlayer] = useState({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        size: 16
+    });
+
     const [planetColors, setPlanetColors] = useState({});
     const [clickedPlanets, setClickedPlanets] = useState(new Set());
     const [planetPositions, setPlanetPositions] = useState([]);
@@ -56,43 +88,62 @@ const SpaceCanvas = () => {
     const [hoverPosition, setHoverPosition] = useState(null);
     const [showIntro, setShowIntro] = useState(true);
 
-    // *** Inventory state: map from resourceName →  { pickups, totalWeight }  ***
     const [inventory, setInventory] = useState({});
-
-    // *** Panel open/closed flag ***
     const [isInvOpen, setIsInvOpen] = useState(false);
+    const [isShopOpen, setIsShopOpen] = useState(false);
 
-    // *** Toggler: flips the flag, wrapped in useCallback so it never re-creates ***
-    const toggleInv = useCallback(() => {
-        setIsInvOpen(open => !open);
-    }, []);
-
-    //const [pickupFeedback, setPickupFeedback] = useState(null);
-    // { name: string, amount: number, color: string }
-
-    // structured floating resource state:
-    // { name: string, amount: number, color: string } | null
     const [floatingResource, setFloatingResource] = useState(null);
-
     const [xp, level, addXp] = useXp();
 
+    const [resourceMultiplier, setResourceMultiplier] = useState(1);
+    const [speedMultiplier, setSpeedMultiplier] = useState(1);
+    const [claimedUpgrades, setClaimedUpgrades] = useState([]);
 
-    // Block browser zoom (Ctrl + +/- and Ctrl + wheel)
+    const toggleInv = useCallback(() => {
+        setIsInvOpen((open) => !open);
+    }, []);
+
+    const toggleShop = useCallback(() => {
+        setIsShopOpen((open) => !open);
+    }, []);
+
+    const handleClaimUpgrade = useCallback((upgrade) => {
+        setClaimedUpgrades((prev) => {
+            if (prev.includes(upgrade.id)) {
+                return prev;
+            }
+
+            return [...prev, upgrade.id];
+        });
+
+        if (upgrade.type === "resource") {
+            setResourceMultiplier(upgrade.value);
+        }
+
+        if (upgrade.type === "speed") {
+            setSpeedMultiplier(upgrade.value);
+        }
+    }, []);
+
     useEffect(() => {
         const onKeyDown = (e) => {
-          if (e.ctrlKey && ['=', '+', '-', '0'].includes(e.key)) {
-            e.preventDefault();
-          }
+            if (e.ctrlKey && ["=", "+", "-", "0"].includes(e.key)) {
+                e.preventDefault();
+            }
         };
+
         const onWheel = (e) => {
-          if (e.ctrlKey) e.preventDefault();
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
         };
-        
-        window.addEventListener('keydown', onKeyDown, { passive: false });
-        window.addEventListener('wheel', onWheel, { passive: false });
+
+        window.addEventListener("keydown", onKeyDown, { passive: false });
+        window.addEventListener("wheel", onWheel, { passive: false });
+
         return () => {
-          window.removeEventListener('keydown', onKeyDown);
-          window.removeEventListener('wheel', onWheel);
+            window.removeEventListener("keydown", onKeyDown);
+            window.removeEventListener("wheel", onWheel);
         };
     }, []);
 
@@ -110,28 +161,32 @@ const SpaceCanvas = () => {
                 canvasRef.current.width = window.innerWidth;
                 canvasRef.current.height = window.innerHeight;
             }
+
             document.body.style.overflow = "hidden";
             document.body.style.backgroundColor = "black";
         };
 
         resizeCanvas();
         window.addEventListener("resize", resizeCanvas);
+
         return () => window.removeEventListener("resize", resizeCanvas);
     }, []);
 
     useEffect(() => {
         const colors = {};
+
         celestialBodies.forEach((body) => {
             colors[body.name] = randomColor();
         });
+
         setPlanetColors(colors);
     }, [celestialBodies]);
 
     useEffect(() => {
         const movePlayer = (e) => {
             setPlayer((prev) => {
-                let { x, y, size } = prev;
-                const moveDistance = size;
+                const { x, y, size } = prev;
+                const moveDistance = size * speedMultiplier;
 
                 switch (e.key) {
                     case "ArrowUp":
@@ -153,10 +208,11 @@ const SpaceCanvas = () => {
         };
 
         window.addEventListener("keydown", movePlayer);
+
         return () => {
             window.removeEventListener("keydown", movePlayer);
         };
-    }, []);
+    }, [speedMultiplier]);
 
     useEffect(() => {
         setPlanetPositions((prevPlanets) =>
@@ -175,7 +231,7 @@ const SpaceCanvas = () => {
                 return {
                     ...planet,
                     visible: inView,
-                    scale: inView ? Math.min(planet.scale + 0.05, 1) : 0 // Smoothly grow planets when they appear
+                    scale: inView ? Math.min(planet.scale + 0.05, 1) : 0
                 };
             })
         );
@@ -187,10 +243,14 @@ const SpaceCanvas = () => {
         const mouseY = e.clientY - rect.top;
 
         const hovered = planetPositions.find((planet) => {
-            if (!planet.visible) return false;
+            if (!planet.visible) {
+                return false;
+            }
+
             const planetX = window.innerWidth / 2 + (planet.x - player.x);
             const planetY = window.innerHeight / 2 + (planet.y - player.y);
             const distance = Math.sqrt((mouseX - planetX) ** 2 + (mouseY - planetY) ** 2);
+
             return distance <= planet.size;
         });
 
@@ -205,17 +265,20 @@ const SpaceCanvas = () => {
 
     const handleCanvasClick = () => {
         if (hoveredPlanet && !clickedPlanets.has(hoveredPlanet.name)) {
-            // 1) Mark planet clicked & award a point (if you still want points)
             setClickedPlanets((prev) => new Set(prev).add(hoveredPlanet.name));
-            //setScore((s) => s + 1);
 
-            // 2) Pick a random resource & increment inventory
-            const res = getRandomResource();           // → {  name, amount, weight, color, rarity }
-            setInventory(inv => {
-                const prev = inv[res.name] || { pickups: 0, totalWeight: 0, rarity: res.rarity };
+            const res = getRandomResource();
+            const finalAmount = res.amount * resourceMultiplier;
 
-                const pickups    = prev.pickups + res.amount;
-                const totalWeight = prev.totalWeight + (res.amount * res.weight);
+            setInventory((inv) => {
+                const prev = inv[res.name] || {
+                    pickups: 0,
+                    totalWeight: 0,
+                    rarity: res.rarity
+                };
+
+                const pickups = prev.pickups + finalAmount;
+                const totalWeight = prev.totalWeight + (finalAmount * res.weight);
 
                 return {
                     ...inv,
@@ -227,45 +290,44 @@ const SpaceCanvas = () => {
                 };
             });
 
-            addXp(res.rarity); // Awards xp based on resource rarity
+            addXp(res.rarity);
 
-            // 3) Trigger the “+amount ResourceName” pop‐up
-            // setPickupFeedback({ 
-            // name:   res.name, 
-            // amount: res.amount, 
-            // color:  res.color 
-            // });
+            setFloatingResource({
+                name: res.name,
+                amount: finalAmount,
+                color: res.color
+            });
 
-            // // 4) Clear it after the animation finishes
-            // setTimeout(() => setPickupFeedback(null), 1000);
-
-            // show floating text
-            //const text = `+${res.amount} ${res.name}`;
-            setFloatingResource({ name: res.name, amount: res.amount, color: res.color });
             setTimeout(() => setFloatingResource(null), 700);
         }
     };
 
-
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+
+        if (!canvas) {
+            return;
+        }
+
         const ctx = canvas.getContext("2d");
 
         const draw = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
 
             planetPositions.forEach((planet) => {
-                if (!planet.visible) return;
+                if (!planet.visible) {
+                    return;
+                }
 
                 const planetX = centerX + (planet.x - player.x);
                 const planetY = centerY + (planet.y - player.y);
 
                 ctx.save();
                 ctx.translate(planetX, planetY);
-                ctx.scale(planet.scale, planet.scale); 
+                ctx.scale(planet.scale, planet.scale);
                 ctx.translate(-planetX, -planetY);
 
                 ctx.beginPath();
@@ -293,52 +355,62 @@ const SpaceCanvas = () => {
     return (
         <>
             {showIntro && <IntroMessage onComplete={handleIntroComplete} />}
-            {/*<Hud score={score} />*/}
-            <Hud 
-                score={0} 
+
+            <Hud
+                score={0}
                 onInventoryToggle={toggleInv}
+                onShopToggle={toggleShop}
                 floatingResource={floatingResource}
                 xp={xp}
                 level={level}
             />
-            {/* {pickupFeedback && (
-                <div
-                    className="pickup-feedback"
-                    style={{ color: pickupFeedback.color }}
-                >
-                    +{pickupFeedback.amount} {pickupFeedback.name}
-                </div>
-            )} */}
-            <canvas ref={canvasRef} onClick={handleCanvasClick} onMouseMove={handleCanvasMouseMove} />
+
+            <canvas
+                ref={canvasRef}
+                onClick={handleCanvasClick}
+                onMouseMove={handleCanvasMouseMove}
+            />
 
             {hoveredPlanet && hoverPosition && (
-            <div className="hover-card"
-                style={{
-                    position: "absolute",
-                    left: `${hoverPosition.x}px`,
-                    top: `${hoverPosition.y}px`,
-                    backgroundColor: "black",
-                    color: "white",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    border: "1px solid white",
-                    transform: "scale(0.8)", // Start small
-                    transition: "transform 0.3s ease-out" // Smooth scaling effect
-                }}
+                <div
+                    className="hover-card"
+                    style={{
+                        position: "absolute",
+                        left: `${hoverPosition.x}px`,
+                        top: `${hoverPosition.y}px`,
+                        backgroundColor: "black",
+                        color: "white",
+                        padding: "10px",
+                        borderRadius: "5px",
+                        border: "1px solid white",
+                        transform: "scale(0.8)",
+                        transition: "transform 0.3s ease-out"
+                    }}
                 >
-                <h3 style={{ color: "purple", marginBottom: "5px" }}>{hoveredPlanet.name}</h3>
-                <p><strong>Type:</strong> {hoveredPlanet.type}</p>
-                <p><strong>Mass:</strong> {hoveredPlanet.mass}</p>
-                <p><strong>Size:</strong> {hoveredPlanet.size.toFixed(2)} km</p>
-                <p><strong>Coordinates:</strong> X: {hoveredPlanet.x.toFixed(1)}, Y: {hoveredPlanet.y.toFixed(1)}</p>
-            </div>
+                    <h3 style={{ color: "purple", marginBottom: "5px" }}>
+                        {hoveredPlanet.name}
+                    </h3>
+                    <p><strong>Type:</strong> {hoveredPlanet.type}</p>
+                    <p><strong>Mass:</strong> {hoveredPlanet.mass}</p>
+                    <p><strong>Size:</strong> {hoveredPlanet.size.toFixed(2)} km</p>
+                    <p>
+                        <strong>Coordinates:</strong> X: {hoveredPlanet.x.toFixed(1)}, Y: {hoveredPlanet.y.toFixed(1)}
+                    </p>
+                </div>
             )}
 
-            {/* Inventory side‐panel */}
             <InventoryPanel
                 open={isInvOpen}
                 items={inventory}
                 onClose={toggleInv}
+            />
+
+            <ShopPanel
+                open={isShopOpen}
+                level={level}
+                claimedUpgrades={claimedUpgrades}
+                onClaimUpgrade={handleClaimUpgrade}
+                onClose={toggleShop}
             />
         </>
     );

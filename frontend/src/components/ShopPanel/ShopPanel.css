@@ -1,0 +1,116 @@
+/* ShopPanel.css */
+
+/* ————————————————————————————
+   PANEL CONTAINER
+   ———————————————————————————— */
+.shop-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  max-width: 400px;
+  height: 100vh;
+  background: rgba(20,20,20,0.95);
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-out;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-panel.open {
+  transform: translateX(0);
+}
+
+/* ————————————————————————————
+   CLOSE BUTTON & HEADER
+   ———————————————————————————— */
+.shop-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.shop-panel > h2 {
+  margin: 8px auto 16px;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* ————————————————————————————
+   SHOP GRID
+   ———————————————————————————— */
+.shop-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ————————————————————————————
+   SINGLE SHOP CARD
+   ———————————————————————————— */
+.shop-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 14px;
+  box-sizing: border-box;
+}
+
+.shop-icon {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.shop-name {
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.shop-description {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ————————————————————————————
+   BUTTONS
+   ———————————————————————————— */
+.shop-btn {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.shop-btn.claim {
+  background: #00aa44;
+  color: white;
+}
+
+.shop-btn.locked {
+  background: #aa2222;
+  color: white;
+  cursor: not-allowed;
+}
+
+.shop-btn.claimed {
+  background: #555;
+  color: #ccc;
+  cursor: not-allowed;
+}
